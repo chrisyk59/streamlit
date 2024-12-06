@@ -33,10 +33,9 @@ if st.session_state.get("authentication_status"):
         menu_title=None,
         options=["Accueil", "Photos"]
     )
-
-    if selection == "Accueil":
+if selection == "Accueil":
         st.write("Bienvenue sur la page d'accueil !")
-    elif selection == "Photos":
+elif selection == "Photos":
         st.write("Bienvenue sur mon album photo")
 elif st.session_state.get("authentication_status") is False:
     st.error("L'username ou le password est/sont incorrect(s)")
