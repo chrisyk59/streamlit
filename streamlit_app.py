@@ -19,25 +19,35 @@ authenticator = Authenticate(
 )
 
 # Gérer la connexion
-authenticator.login()
+name, authentication_status, username = authenticator.login("Connexion", "main")
 
+# Définir la page d'accueil
 def accueil():
     st.title("Bienvenue chez Santa Mamamia")
 
-if st.session_state.get("authentication_status"):
+# Vérifier l'état d'authentification
+if authentication_status:
     accueil()
-    authenticator.logout("Déconnexion")
+    authenticator.logout("Déconnexion", "main")
     
     # Menu de navigation avec streamlit_option_menu
     selection = option_menu(
         menu_title=None,
-        options=["Accueil", "Photos"]
+        options=["Accueil", "Photos"],
+        icons=["house", "camera"],  # Optionnel : Ajoutez des icônes
+        menu_icon="cast",  # Optionnel : Icône du menu principal
+        default_index=0,  # L'onglet par défaut
     )
-if selection == "Accueil":
+
+    if selection == "Accueil":
         st.write("Bienvenue sur la page d'accueil !")
-elif selection == "Photos":
+    elif selection == "Photos":
         st.write("Bienvenue sur mon album photo")
-elif st.session_state.get("authentication_status") is False:
+        # Ajoutez des photos ici si nécessaire
+        st.image(["image1.jpg", "image2.jpg"], caption=["Photo 1", "Photo 2"], width=300)
+
+elif authentication_status is False:
     st.error("L'username ou le password est/sont incorrect(s)")
-elif st.session_state.get("authentication_status") is None:
+
+elif authentication_status is None:
     st.warning("Les champs username et mot de passe doivent être remplis")
