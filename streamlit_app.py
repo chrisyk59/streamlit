@@ -21,23 +21,37 @@ authenticator = Authenticate(
 # Gérer la connexion
 authenticator.login()
 
+# Fonction principale : Accueil avec navigation
 def accueil():
     st.title("Bienvenue chez Santa Mamamia")
+    
+    # Initialisation de l'état pour la sélection du menu
+    if "menu_selection" not in st.session_state:
+        st.session_state["menu_selection"] = "Accueil"
+
+    # Sidebar avec menu de navigation
+    with st.sidebar:
+        selection = option_menu(
+            menu_title="Navigation",  # Titre de la barre
+            options=["Accueil", "Photos"],  # Options dans la barre
+            icons=["house", "camera"],  # Icônes associées
+            menu_icon="menu-app",  # Icône pour le menu global
+            default_index=["Accueil", "Photos"].index(st.session_state["menu_selection"])  # Synchronisation avec l'état
+        )
+        # Mettre à jour l'état avec la sélection actuelle
+        st.session_state["menu_selection"] = selection
+
+    # Contenu des pages
+    if st.session_state["menu_selection"] == "Accueil":
+        st.write("Bienvenue sur la page d'accueil !")
+    elif st.session_state["menu_selection"] == "Photos":
+        st.write("Bienvenue sur mon album photo !")
 
 if st.session_state.get("authentication_status"):
     accueil()
-    authenticator.logout("Déconnexion")
+    # Ajout d'une clé unique au bouton de déconnexion
+    authenticator.logout("Déconnexion", key="unique_logout_button")
     
-    # Menu de navigation avec streamlit_option_menu
-    selection = option_menu(
-        menu_title=None,
-        options=["Accueil", "Photos"]
-    )
-
-    if selection == "Accueil":
-        st.write("Bienvenue sur la page d'accueil !")
-    elif selection == "Photos":
-        st.write("Bienvenue sur mon album photo")
 elif st.session_state.get("authentication_status") is False:
     st.error("L'username ou le password est/sont incorrect(s)")
 elif st.session_state.get("authentication_status") is None:
