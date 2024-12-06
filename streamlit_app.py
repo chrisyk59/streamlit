@@ -22,7 +22,7 @@ authenticator = Authenticate(
 authenticator.login()
 
 def accueil():
-    st.title("Bienvenue sur le contenu réservé aux utilisateurs connectés")
+    st.title("Bienvenue chez Santa Mamamia")
 
 if st.session_state.get("authentication_status"):
     accueil()
